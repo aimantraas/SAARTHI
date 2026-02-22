@@ -1,6 +1,14 @@
 # LeadGen Backend — Python LinkedIn Lead Generation System
 
-A Python backend implementation of the N8N LinkedIn LeadGen workflows, providing automated lead generation, enrichment, and email verification.
+A powerful Python backend implementation of LinkedIn lead generation workflows, providing automated lead generation, enrichment, and email verification. This system integrates with SerpAPI, Apify, EmailVerify.io, and Google Sheets to streamline B2B lead discovery.
+
+<div align="center">
+
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](#license)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+</div>
 
 ## Architecture Overview
 
@@ -71,6 +79,8 @@ leadgen_backend/
     └── email_verify.py      # Workflow 2: Email Verification
 
 main.py                      # CLI entry point
+wsgi.py                      # WSGI server entry point
+app.py                       # Flask web API
 requirements.txt             # Python dependencies
 .env.example                 # Environment variables template
 ```
@@ -131,7 +141,7 @@ python main.py leadgen --mock-sheets --companies "Retail"
 
 ### Web API (Flask)
 
-This repo also includes a small Flask web UI/API in `app.py`.
+This repo also includes a Flask web UI/API in `app.py`.
 
 Run in development (built-in server):
 
@@ -139,7 +149,7 @@ Run in development (built-in server):
 python app.py
 ```
 
-Run in production (recommended WSGI server â€” no "development server" warning):
+Run in production (recommended WSGI server – no "development server" warning):
 
 ```powershell
 pip install -r requirements.txt
@@ -279,3 +289,157 @@ The system includes built-in rate limiting:
 - Failed email verifications are marked as `unknown` (requeued)
 - Failed profile scrapes are skipped
 - All errors include stack traces in debug mode
+
+## Testing
+
+Run automated tests to verify the system:
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage report
+pytest --cov=leadgen_backend
+
+# Run specific test file
+pytest tests/test_data_cleaning.py
+
+# Run tests with verbose output
+pytest -v
+```
+
+Test files:
+- `test_config.py` — Configuration and initialization tests
+- `test_api.py` — API endpoint tests
+- `test_email_api.py` — Email verification client tests
+- `tests/test_data_cleaning.py` — Data cleaning logic tests
+
+## Development Setup
+
+### Local Development
+
+1. Clone the repository with submodules:
+```bash
+git clone --recurse-submodules https://github.com/aimantraas/SAARTHI.git
+cd "emali system"
+```
+
+2. Create and activate virtual environment:
+```bash
+python -m venv venv
+venv\Scripts\activate  # Windows
+source venv/bin/activate  # Linux/Mac
+```
+
+3. Install development dependencies:
+```bash
+pip install -r requirements.txt
+pip install black isort flake8 mypy
+```
+
+### Code Quality
+
+This project uses:
+- **black** — Code formatting
+- **isort** — Import sorting
+- **flake8** — Linting
+- **mypy** — Type checking
+
+Run code quality checks:
+```bash
+black leadgen_backend tests
+isort leadgen_backend tests
+flake8 leadgen_backend tests
+mypy leadgen_backend
+```
+
+## Submodules
+
+This repository includes the **Saarethi** project as a submodule:
+
+```bash
+# Update submodule
+git submodule update --init --recursive
+
+# Clone with submodules
+git clone --recurse-submodules https://github.com/aimantraas/SAARTHI.git
+```
+
+See [Saarethi Repository](https://github.com/aimantraas/Saarethi) for details.
+
+## Production Deployment
+
+For production deployments:
+
+1. Use a production WSGI server (Waitress, Gunicorn, uWSGI)
+2. Configure environment variables properly
+3. Set `PRODUCTION=1` or `USE_WAITRESS=1`
+4. Use proper logging and monitoring
+5. Implement rate limiting on the frontend
+
+## Troubleshooting
+
+### Common Issues
+
+**Google Sheets Authentication Fails**
+- Ensure `credentials.json` is in the project root
+- Check Google OAuth2 scopes include Google Sheets API
+- Try regenerating credentials in Google Cloud Console
+
+**API Rate Limiting**
+- Reduce batch size with `--per-page` flag
+- Increase delays in `config.py`
+- Implement request queuing on production
+
+**Email Verification Slow**
+- Increase `--limit` parameter
+- Run multiple verification instances with different sheet ranges
+- Check API quota in EmailVerify.io dashboard
+
+**LinkedIn Profile Scraping Fails**
+- Verify Apify API token is valid
+- Check Apify actor availability
+- Ensure LinkedIn URLs are public profiles
+
+### Debug Mode
+
+Enable debug logging:
+```bash
+export FLASK_DEBUG=1
+python app.py
+```
+
+## Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Follow code style guidelines (black, isort, flake8)
+4. Add tests for new functionality
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+## Support
+
+For issues, feature requests, or questions:
+- Open an [issue](https://github.com/aimantraas/SAARTHI/issues) on GitHub
+- Check documentation for common questions
+
+## Changelog
+
+### v1.0.0 (Current)
+- LinkedIn lead generation with SerpAPI
+- Apify profile scraping
+- Email verification integration
+- Google Sheets integration
+- Email verification workflow scheduling
+- Flask web API
+- Comprehensive data cleaning
+
+---
+
+**Built with ❤️ by [aimantraas](https://github.com/aimantraas)**
