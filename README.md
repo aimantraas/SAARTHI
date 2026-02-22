@@ -135,8 +135,6 @@ python main.py pipeline --companies "Retail" --position "Head operation"
 # Run scheduled email verification (every hour)
 python main.py schedule --interval 3600 --limit 50
 
-# Use mock sheets for testing
-python main.py leadgen --mock-sheets --companies "Retail"
 ```
 
 ### Web API (Flask)

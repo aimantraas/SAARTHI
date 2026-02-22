@@ -13,7 +13,6 @@ from pathlib import Path
 from leadgen_backend import (
     LeadGenConfig,
     GoogleSheetsClient,
-    MockGoogleSheetsClient,
     run_leadgen_workflow,
     run_email_verification
 )
@@ -62,18 +61,15 @@ def create_config(args: argparse.Namespace) -> LeadGenConfig:
 
 def create_sheets_client(
     config: LeadGenConfig,
-    mock: bool = False
 ):
     """Create Google Sheets client."""
-    if mock:
-        return MockGoogleSheetsClient(config)
     return GoogleSheetsClient(config)
 
 
 async def cmd_leadgen(args: argparse.Namespace) -> int:
     """Run the lead generation workflow."""
     config = create_config(args)
-    sheets_client = create_sheets_client(config, args.mock_sheets)
+    sheets_client = create_sheets_client(config)
     
     print("="*60)
     print("LeadGen + Enrichment Workflow")
@@ -104,7 +100,7 @@ async def cmd_leadgen(args: argparse.Namespace) -> int:
 async def cmd_email_verify(args: argparse.Namespace) -> int:
     """Run the email verification workflow."""
     config = create_config(args)
-    sheets_client = create_sheets_client(config, args.mock_sheets)
+    sheets_client = create_sheets_client(config)
     
     print("="*60)
     print("Email Verification Workflow")
@@ -134,7 +130,7 @@ async def cmd_email_verify(args: argparse.Namespace) -> int:
 async def cmd_full_pipeline(args: argparse.Namespace) -> int:
     """Run the complete pipeline: leadgen + email verification."""
     config = create_config(args)
-    sheets_client = create_sheets_client(config, args.mock_sheets)
+    sheets_client = create_sheets_client(config)
     
     print("="*60)
     print("Full Pipeline: LeadGen + Email Verification")
@@ -178,7 +174,7 @@ async def cmd_schedule_email_verify(args: argparse.Namespace) -> int:
     from leadgen_backend import EmailVerificationWorkflow
     
     config = create_config(args)
-    sheets_client = create_sheets_client(config, args.mock_sheets)
+    sheets_client = create_sheets_client(config)
     
     workflow = EmailVerificationWorkflow(config, sheets_client)
     
@@ -330,11 +326,6 @@ Examples:
     parser.add_argument(
         "--credentials-path",
         help="Path to Google credentials JSON file"
-    )
-    parser.add_argument(
-        "--mock-sheets",
-        action="store_true",
-        help="Use mock sheets client (for testing)"
     )
     parser.add_argument(
         "--sheet-name",

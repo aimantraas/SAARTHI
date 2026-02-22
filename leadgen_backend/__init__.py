@@ -32,7 +32,7 @@ from .models import (
     SearchMetadata
 )
 from .clients import SerpAPIClient, ApifyLinkedInClient, EmailVerifyClient
-from .sheets import GoogleSheetsClient, MockGoogleSheetsClient
+from .sheets import GoogleSheetsClient
 from .workflows import (
     LeadGenWorkflow,
     run_leadgen_workflow,
@@ -76,7 +76,6 @@ __all__ = [
     
     # Sheets
     "GoogleSheetsClient",
-    "MockGoogleSheetsClient",
     
     # Workflows
     "LeadGenWorkflow",

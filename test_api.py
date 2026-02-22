@@ -8,7 +8,6 @@ data = {
     "country": "India",
     "country_code": "IN",
     "batch_size": 10,
-    "mock_sheets": True
 }
 
 try:

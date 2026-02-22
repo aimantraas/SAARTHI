@@ -4,7 +4,6 @@ import json
 
 data = {
     "limit": 5,
-    "mock_sheets": True
 }
 
 try:
